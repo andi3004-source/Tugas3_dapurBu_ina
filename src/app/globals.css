@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Palet "Dapur Bu Aina" — hangat tradisional */
+  --background: 40 50% 96%; /* cream #FBF6EC */
+  --foreground: 179 49% 17%; /* teal-dark #16403F */
+  --card: 45 60% 99%; /* paper #FFFDF8 */
+  --card-foreground: 179 49% 17%;
+  --popover: 45 60% 99%;
+  --popover-foreground: 179 49% 17%;
+  --primary: 179 50% 24%; /* teal #1F5C5B */
+  --primary-foreground: 40 50% 96%;
+  --secondary: 19 49% 48%; /* terracotta #B8653F */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 40 33% 91%;
+  --muted-foreground: 26 22% 38%; /* wood-ish */
+  --accent: 179 34% 88%; /* teal soft */
+  --accent-foreground: 179 50% 24%;
+  --destructive: 7 61% 43%; /* chili #B23A2B */
+  --destructive-foreground: 0 0% 100%;
+  --border: 39 41% 84%; /* krem gelap #E8DDC8 */
+  --input: 39 41% 84%;
+  --ring: 40 63% 48%; /* gold focus #C9942E */
+  --radius: 1rem;
+
+  /* Brand palette (hex, dipakai langsung di beberapa tempat) */
+  --brand-teal: #1f5c5b;
+  --brand-teal-dark: #16403f;
+  --brand-gold: #c9942e;
+  --brand-terracotta: #b8653f;
+  --brand-cream: #fbf6ec;
+  --brand-paper: #fffdf8;
+  --brand-leaf: #6e8b4a;
+  --brand-chili: #b23a2b;
+  --brand-wood: #7a4e2d;
+
+  /* Warna grafik */
+  --chart-1: 179 50% 24%; /* teal */
+  --chart-2: 40 63% 48%; /* gold */
+  --chart-3: 19 49% 48%; /* terracotta */
+  --chart-4: 87 31% 42%; /* leaf */
+  --chart-5: 26 46% 33%; /* wood */
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /* Tekstur kertas halus */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Angka rupiah dengan lebar tetap */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bayangan hangat (kecoklatan) untuk kartu */
+.shadow-warm {
+  box-shadow:
+    0 1px 2px rgba(122, 78, 45, 0.06),
+    0 4px 12px rgba(122, 78, 45, 0.06);
+}
+
+/* Pemisah tali/emas dekoratif */
+.divider-rope {
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--ring) / 0.5) 20%,
+    hsl(var(--ring) / 0.5) 80%,
+    transparent
+  );
+}
+
+/* Confetti transaksi sukses */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(90vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-pop-in {
+  animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Scrollbar halus */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(39 30% 75%);
+  border-radius: 9999px;
+}
+
+/* ===== Print: struk thermal 80mm ===== */
+@media print {
+  body {
+    background-image: none;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm;
+    margin: 0;
+    padding: 4mm;
+    font-size: 11px;
+    color: #000;
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+}
+
+/* Halaman print laporan (A4) */
+@media print {
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+  .print-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

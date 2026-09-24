@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+
+# next.js / build output
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# env (rahasia) — hanya .env.example yang boleh ikut
+.env
+.env*.local
+.env.production
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# vercel
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
+
+# testing
+coverage/
+cookies*.txt
+*.cookie
+tmp/
+
+# misc
+*.pem
+
+# aset mentah yang tidak dipakai aplikasi
+src/*.mp4

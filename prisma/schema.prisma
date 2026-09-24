@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  KASIR
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+enum OrderType {
+  DINE_IN
+  TAKE_AWAY
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  DEBIT
+  CREDIT_CARD
+  QRIS
+}
+
+enum PaymentStatus {
+  CONFIRMED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  username     String   @unique
+  passwordHash String
+  role         Role     @default(KASIR)
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  orders         Order[]         @relation("CashierOrders")
+  payments       Payment[]       @relation("ConfirmedPayments")
+  stockMovements StockMovement[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  products Product[]
+}
+
+model Product {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  name       String
+  categoryId String
+  price      Int
+  stock      Int      @default(0)
+  minStock   Int      @default(0)
+  unit       String   @default("porsi")
+  imageUrl   String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category       Category        @relation(fields: [categoryId], references: [id])
+  orderItems     OrderItem[]
+  stockMovements StockMovement[]
+
+  @@index([categoryId])
+}
+
+model StockMovement {
+  id          String            @id @default(cuid())
+  productId   String
+  type        StockMovementType
+  quantity    Int
+  stockBefore Int
+  stockAfter  Int
+  note        String?
+  userId      String?
+  createdAt   DateTime          @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id])
+
+  @@index([productId])
+  @@index([createdAt])
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  orderType     OrderType
+  tableNumber   String?
+  customerName  String?
+  status        OrderStatus @default(PENDING)
+  note          String?
+  subtotal      Int
+  tax           Int
+  serviceCharge Int
+  total         Int
+  cashierId     String
+  createdAt     DateTime    @default(now())
+
+  cashier User        @relation("CashierOrders", fields: [cashierId], references: [id])
+  items   OrderItem[]
+  payment Payment?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          String @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  price       Int
+  quantity    Int
+  subtotal    Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @unique
+  method        PaymentMethod
+  amountPaid    Int
+  change        Int           @default(0)
+  referenceNo   String?
+  cardLast4     String?
+  status        PaymentStatus @default(CONFIRMED)
+  paidAt        DateTime      @default(now())
+  confirmedById String
+
+  order       Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  confirmedBy User  @relation("ConfirmedPayments", fields: [confirmedById], references: [id])
+}
+
+model Setting {
+  id             String @id @default(cuid())
+  restaurantName String @default("Dapur Bu Aina")
+  tagline        String @default("Citarasa Warisan Keluarga")
+  address        String @default("Jl. Margonda Raya No. 100, Depok, Jawa Barat")
+  phone          String @default("021-7888999")
+  taxPercent     Int    @default(10)
+  servicePercent Int    @default(5)
+}
