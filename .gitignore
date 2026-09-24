@@ -43,5 +43,6 @@ src/*.mp4
 
 # skill agen yang dipasang otomatis oleh integrasi (lokal saja)
 .agents/
-.claude/
+.claude/skills/
+.claude/settings.local.json
 skills-lock.json
