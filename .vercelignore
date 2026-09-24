@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.agents
+.claude
+node_modules
+.next
+cookies*.txt
+tmp
+src/*.mp4

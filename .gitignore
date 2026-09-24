@@ -36,3 +36,12 @@ tmp/
 
 # aset mentah yang tidak dipakai aplikasi
 src/*.mp4
+
+.vercel
+.env*
+!.env.example
+
+# skill agen yang dipasang otomatis oleh integrasi (lokal saja)
+.agents/
+.claude/
+skills-lock.json
