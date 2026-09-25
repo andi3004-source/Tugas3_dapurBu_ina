@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useCart, cartSubtotal } from "@/store/cart";
 import { createOrder } from "@/actions/orders";
+import { calculateCharges } from "@/lib/billing";
 import { formatRupiah, formatWaktu, cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,9 +57,7 @@ export function KasirDetail({
 
   const isDineIn = cart.orderType === "DINE_IN";
   const subtotal = cartSubtotal(cart.items);
-  const tax = Math.round((subtotal * taxPercent) / 100);
-  const service = Math.round((subtotal * servicePercent) / 100);
-  const total = subtotal + tax + service;
+  const { tax, serviceCharge: service, total } = calculateCharges(subtotal, taxPercent, servicePercent);
 
   function checkout() {
     if (isDineIn && !cart.tableNumber.trim()) {

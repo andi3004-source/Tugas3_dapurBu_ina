@@ -6,24 +6,20 @@ import { prisma } from "@/lib/prisma";
 import { requireCashier, requireUser } from "@/lib/guards";
 import { orderSchema } from "@/lib/validations";
 import type { ActionResult } from "@/actions/products";
+import { calculateBilling, lineSubtotal } from "@/lib/billing";
+import { formatOrderNumber, orderDayRange } from "@/lib/order-number";
+import { validateOrderStock } from "@/lib/stock";
 
 /**
  * Nomor transaksi format #TRX-YYYYMMDD-XXXX, urutan direset per hari.
  */
 async function nextOrderNumber(tx: Prisma.TransactionClient): Promise<string> {
   const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  const ymd = `${y}${m}${d}`;
-
-  const dayStart = new Date(y, now.getMonth(), now.getDate(), 0, 0, 0, 0);
-  const dayEnd = new Date(y, now.getMonth(), now.getDate(), 23, 59, 59, 999);
+  const { start, end } = orderDayRange(now);
   const countToday = await tx.order.count({
-    where: { createdAt: { gte: dayStart, lte: dayEnd } },
+    where: { createdAt: { gte: start, lte: end } },
   });
-  const seq = String(countToday + 1).padStart(4, "0");
-  return `#TRX-${ymd}-${seq}`;
+  return formatOrderNumber(now, countToday);
 }
 
 export async function createOrder(
@@ -51,14 +47,8 @@ export async function createOrder(
       const products = await tx.product.findMany({ where: { id: { in: productIds } } });
       const map = new Map(products.map((p) => [p.id, p]));
 
-      for (const item of d.items) {
-        const p = map.get(item.productId);
-        if (!p) throw new Error("Produk tidak ditemukan.");
-        if (!p.isActive) throw new Error(`${p.name} tidak aktif.`);
-        if (p.stock < item.quantity) {
-          throw new Error(`Stok ${p.name} tidak cukup (sisa ${p.stock}).`);
-        }
-      }
+      const stockError = validateOrderStock(d.items, map);
+      if (stockError) throw new Error(stockError);
 
       const orderItems = d.items.map((item) => {
         const p = map.get(item.productId)!;
@@ -67,14 +57,15 @@ export async function createOrder(
           productName: p.name,
           price: p.price,
           quantity: item.quantity,
-          subtotal: p.price * item.quantity,
+          subtotal: lineSubtotal(p.price, item.quantity),
         };
       });
 
-      const subtotal = orderItems.reduce((s, it) => s + it.subtotal, 0);
-      const tax = Math.round((subtotal * taxPct) / 100);
-      const serviceCharge = Math.round((subtotal * svcPct) / 100);
-      const total = subtotal + tax + serviceCharge;
+      const { subtotal, tax, serviceCharge, total } = calculateBilling(
+        orderItems.map((it) => ({ price: it.price, quantity: it.quantity })),
+        taxPct,
+        svcPct,
+      );
 
       const orderNumber = await nextOrderNumber(tx);
 

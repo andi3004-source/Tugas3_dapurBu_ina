@@ -29,7 +29,14 @@ export const stockInSchema = z.object({
 
 export const stockAdjustSchema = z.object({
   productId: z.string().min(1, "Produk wajib dipilih"),
-  newStock: z.coerce.number().int().min(0, "Stok baru tidak boleh negatif"),
+  // Input kosong jangan di-coerce menjadi 0 (bisa mengosongkan stok tanpa sengaja).
+  newStock: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+    z.coerce
+      .number({ invalid_type_error: "Stok baru wajib diisi" })
+      .int()
+      .min(0, "Stok baru tidak boleh negatif"),
+  ),
   note: z.string().trim().min(1, "Alasan penyesuaian wajib diisi").max(200),
 });
 

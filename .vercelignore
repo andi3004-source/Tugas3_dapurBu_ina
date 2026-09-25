@@ -8,3 +8,6 @@ node_modules
 cookies*.txt
 tmp
 src/*.mp4
+src/__tests__
+vitest.config.ts
+coverage

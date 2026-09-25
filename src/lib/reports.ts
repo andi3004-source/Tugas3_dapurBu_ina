@@ -1,46 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { paymentMethodLabel } from "@/lib/format-labels";
 import type { PaymentMethod } from "@prisma/client";
+import { buildDailyTrend, periodToRange, summarizeRevenue, type Period } from "@/lib/period";
 
-export type Period =
-  | { type: "weekly"; value: string } // "2026-W39"
-  | { type: "monthly"; value: string }; // "2026-09"
-
-/** Ubah ISO week string "2026-W39" menjadi rentang Senin–Minggu. */
-export function isoWeekToRange(value: string): { start: Date; end: Date; label: string } {
-  const m = value.match(/^(\d{4})-W(\d{2})$/);
-  const now = new Date();
-  const year = m ? Number(m[1]) : now.getFullYear();
-  const week = m ? Number(m[2]) : 1;
-
-  // Kamis minggu pertama menentukan tahun ISO
-  const simple = new Date(year, 0, 1 + (week - 1) * 7);
-  const dow = simple.getDay();
-  const monday = new Date(simple);
-  if (dow <= 4) monday.setDate(simple.getDate() - simple.getDay() + 1);
-  else monday.setDate(simple.getDate() + 8 - simple.getDay());
-  monday.setHours(0, 0, 0, 0);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
-
-  return { start: monday, end: sunday, label: `Minggu ke-${week}, ${year}` };
-}
-
-export function monthToRange(value: string): { start: Date; end: Date; label: string } {
-  const m = value.match(/^(\d{4})-(\d{2})$/);
-  const now = new Date();
-  const year = m ? Number(m[1]) : now.getFullYear();
-  const month = m ? Number(m[2]) - 1 : now.getMonth();
-  const start = new Date(year, month, 1, 0, 0, 0, 0);
-  const end = new Date(year, month + 1, 0, 23, 59, 59, 999);
-  const label = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric" }).format(start);
-  return { start, end, label };
-}
-
-export function periodToRange(period: Period) {
-  return period.type === "weekly" ? isoWeekToRange(period.value) : monthToRange(period.value);
-}
+export type { Period } from "@/lib/period";
+export { isoWeekToRange, monthToRange, periodToRange } from "@/lib/period";
 
 export async function getReport(period: Period) {
   const { start, end, label } = periodToRange(period);
@@ -54,28 +18,10 @@ export async function getReport(period: Period) {
     orderBy: { createdAt: "asc" },
   });
 
-  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
-  const totalTx = orders.length;
-  const avgTx = totalTx ? Math.round(totalRevenue / totalTx) : 0;
+  const { totalRevenue, totalTx, avgTx } = summarizeRevenue(orders);
 
   // Tren harian
-  const trendMap = new Map<string, { sales: number; orders: number }>();
-  for (const o of orders) {
-    const key = `${o.createdAt.getFullYear()}-${String(o.createdAt.getMonth() + 1).padStart(2, "0")}-${String(o.createdAt.getDate()).padStart(2, "0")}`;
-    const cur = trendMap.get(key) ?? { sales: 0, orders: 0 };
-    cur.sales += o.total;
-    cur.orders += 1;
-    trendMap.set(key, cur);
-  }
-  const trend = [...trendMap.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, v]) => ({
-      date,
-      label: new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "short" }).format(
-        new Date(date),
-      ),
-      ...v,
-    }));
+  const trend = buildDailyTrend(orders);
 
   // Per kategori
   const catMap = new Map<string, number>();

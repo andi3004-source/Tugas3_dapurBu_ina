@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireCashier } from "@/lib/guards";
 import { paymentSchema } from "@/lib/validations";
 import type { ActionResult } from "@/actions/products";
+import { calculateCashPayment } from "@/lib/billing";
 
 export async function confirmPayment(
   raw: unknown,
@@ -28,12 +29,13 @@ export async function confirmPayment(
       if (order.status === "CANCELLED") {
         throw new Error("Pesanan sudah dibatalkan.");
       }
-      if (d.method === "CASH" && d.amountPaid < order.total) {
+      const cash = calculateCashPayment(order.total, d.amountPaid);
+      if (d.method === "CASH" && !cash.enough) {
         throw new Error("Uang tunai kurang dari total tagihan.");
       }
 
       const amountPaid = d.method === "CASH" ? d.amountPaid : order.total;
-      const change = d.method === "CASH" ? amountPaid - order.total : 0;
+      const change = d.method === "CASH" ? cash.change : 0;
 
       await tx.payment.create({
         data: {

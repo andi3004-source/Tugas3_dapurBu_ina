@@ -1,0 +1,325 @@
+
+> dapur-bu-aina@1.0.0 test
+> vitest run --reporter=verbose
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.1 C:/Users/andi/Documents/Tugas3_dapurBu_ina
+
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-01 Jus Alpukat stok 0 / min 10 berstatus Habis 1ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-02 Es Jeruk stok 8 / min 20 berstatus Hampir Habis 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-03 Air Mineral stok 200 / min 30 berstatus Aman 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-04 [batas] stok sama dengan minimum (20/20) berstatus Hampir Habis 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-05 [batas] stok minimum + 1 (21/20) berstatus Aman 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-06 [batas] stok 1 (di atas nol) dengan min 10 berstatus Hampir Habis 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-07 [batas] stok minimum 0: stok 0 Habis, stok 1 Aman 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-08 [salah] stok negatif (-1) tetap dianggap Habis 0ms
+ ✓ src/__tests__/u01-status-stok.test.ts > U1 - Status stok > U1-09 label status berbahasa Indonesia sesuai tampilan 1ms
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-01 pesanan pertama 25 Sep 2026 bernomor #TRX-20260925-0001 2ms
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-02 urutan melanjutkan jumlah pesanan hari itu (41 pesanan → 0042) 0ms
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-03 [batas] urutan ke-9999 tetap 4 digit 0ms
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-04 format sesuai pola #TRX-YYYYMMDD-XXXX 0ms
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-05 bulan & tanggal satu digit diberi nol di depan (5 Jan 2026 → 20260105) 0ms
+ × src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-06 [batas] pesanan 00:30 WIB 25 Sep memakai tanggal 20260925 (bukan tanggal UTC 24 Sep) 6ms
+   → expected '#TRX-20260924-0001' to be '#TRX-20260925-0001' // Object.is equality
+ ✓ src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-07 [batas] pesanan 23:59 WIB 24 Sep masih memakai tanggal 20260924 0ms
+ × src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-08 rentang hitung urutan harian = 00:00–23:59:59.999 WIB 1ms
+   → expected '2026-09-25T00:00:00.000Z' to be '2026-09-24T17:00:00.000Z' // Object.is equality
+ × src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-09 [batas] pesanan 00:30 WIB dihitung di hari yang sama dengan pesanan 14:00 WIB 1ms
+   → expected '2026-09-24T00:00:00.000Z' to be '2026-09-25T00:00:00.000Z' // Object.is equality
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-01 total Meja 12 diformat Rp 42.550 20ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-02 [batas] nol diformat Rp 0 0ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-03 [batas] pecahan dibulatkan ke rupiah terdekat (1.234,6 → Rp 1.235) 0ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-04 [salah] nilai null/undefined tidak error, tampil Rp 0 0ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-05 angka ribuan & juta memakai pemisah titik id-ID 0ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-06 tanggal panjang zona Asia/Jakarta: Rabu, 23 September 2026 4ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-07 [batas] 17:00 UTC = 00:00 WIB sudah berganti ke Kamis, 24 September 2026 1ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-08 tanggal+waktu dan waktu memakai jam WIB (07:32 UTC → 14.32) 1ms
+ ✓ src/__tests__/u09-format.test.ts > U9 - Format rupiah & tanggal > U9-09 persentase perubahan: naik 10%, dari 0 ke >0 = 100%, 0 ke 0 = 0% 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-01 QRIS dengan nomor referensi diterima 3ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-02 [salah] QRIS tanpa nomor referensi ditolak 1ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-03 [salah] QRIS dengan nomor referensi berisi spasi saja ditolak 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-04 Kartu Debit dengan 4 digit terakhir 1234 diterima 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-05 [batas] Kartu Debit 3 digit (123) dan 5 digit (12345) ditolak 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-06 [salah] Kartu Kredit dengan huruf (12a4) ditolak 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-07 [salah] Kartu Kredit tanpa 4 digit terakhir ditolak 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-08 Kartu Kredit 4 digit valid diterima (nomor referensi opsional) 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-09 tunai tidak memerlukan nomor referensi maupun 4 digit kartu 0ms
+ ✓ src/__tests__/u04-non-tunai.test.ts > U4 - Validasi pembayaran non tunai > U4-10 [salah] metode pembayaran tidak dikenal (OVO) ditolak 1ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-01 data produk lengkap diterima dan angka string dikonversi ke number 4ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-02 [salah] kode, nama, kategori, dan satuan kosong ditolak dengan pesan wajib 1ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-03 [salah] nama berisi spasi saja ditolak (di-trim) 0ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-04 [batas] harga 0 ditolak, harga 1 diterima 0ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-05 [salah] harga negatif ditolak 0ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-06 [salah] harga desimal (1500.5) ditolak karena rupiah bulat 1ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-07 [batas] stok 0 diterima, stok -1 ditolak 1ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-08 [salah] stok minimum negatif ditolak 0ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-09 [salah] stok berupa teks (abc) ditolak 0ms
+ ✓ src/__tests__/u07-validasi-produk.test.ts > U7 - Validasi form produk (zod) > U7-10 URL gambar https diterima, ftp ditolak 1ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-01 pesan 2 Es Jeruk dari stok 8 diterima 2ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-02 [batas] qty sama dengan stok (8 Es Jeruk dari stok 8) diterima 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-03 [batas] qty stok + 1 (9 Es Jeruk dari stok 8) ditolak 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-04 [salah] pesan Jus Alpukat yang stoknya 0 ditolak 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-05 [batas] qty 0 ditolak oleh skema pesanan dan fungsi validasi 2ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-06 [salah] qty negatif (-1) ditolak oleh skema pesanan 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-07 [salah] pesanan tanpa item ditolak dengan pesan 'Minimal 1 item' 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-08 [salah] produk yang tidak ada / nonaktif ditolak 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - Validasi stok pesanan > U5-09 banyak item: satu item kurang stok membuat seluruh pesanan ditolak 0ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - createOrder menolak stok kurang (Prisma di-mock) > U5-10 [salah] pesan 9 Es Jeruk (stok 8) → gagal, stok & pesanan tidak diubah 2ms
+ ✓ src/__tests__/u05-stok-pesanan.test.ts > U5 - createOrder menolak stok kurang (Prisma di-mock) > U5-11 [salah] stok habis karena pesanan lain (race) → updateMany 0 baris, pesanan ditolak 1ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-01 [salah] uang Rp0 → uang kurang, kekurangan Rp42.550 2ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-02 [batas] uang Rp42.549 (kurang 1 rupiah) → uang kurang 0ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-03 [batas] uang pas Rp42.550 → kembalian Rp0 0ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-04 uang Rp50.000 → kembalian Rp7.450 0ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-05 validasi kasir: tunai kurang → CASH_SHORT, tunai pas → lolos 0ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - Pembayaran tunai > U3-06 [salah] skema pembayaran menolak nominal negatif 2ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - confirmPayment tunai (Prisma di-mock) > U3-07 [salah] uang Rp42.549 ditolak & pembayaran tidak disimpan 2ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - confirmPayment tunai (Prisma di-mock) > U3-08 uang Rp50.000 disimpan dengan kembalian Rp7.450 dan status Lunas 1ms
+ ✓ src/__tests__/u03-pembayaran-tunai.test.ts > U3 - confirmPayment tunai (Prisma di-mock) > U3-09 [salah] pesanan yang sudah Lunas tidak bisa dibayar dua kali 0ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-01 Air Mineral 150 → 200 menghasilkan selisih +50 2ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-02 penyesuaian turun 200 → 150 menghasilkan selisih -50 1ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-03 [batas] stok baru 0 diterima (selisih -150) 1ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-04 [batas] stok baru sama dengan stok lama → selisih 0 0ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-05 [salah] stok baru -1 ditolak 1ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-06 [salah] alasan penyesuaian kosong / hanya spasi ditolak 0ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-07 [batas] alasan 200 karakter diterima, 201 karakter ditolak 1ms
+ × src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-08 [salah] stok baru kosong (tidak diisi) ditolak 5ms
+   → expected null not to be null
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-09 stok masuk 150 + 50 = 200 0ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-10 [batas] stok masuk 0 ditolak, stok masuk 1 diterima 0ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - stockAdjust menyimpan riwayat (Prisma di-mock) > U6-11 penyesuaian Air Mineral 150 → 200 mencatat ADJUSTMENT +50 1ms
+ ✓ src/__tests__/u06-update-stok.test.ts > U6 - stockAdjust menyimpan riwayat (Prisma di-mock) > U6-12 [salah] penyesuaian ke -1 ditolak tanpa menyentuh database 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-01 menghitung total billing Meja 12 = 42.550 2ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-02 subtotal item = harga × qty (Ayam Bakar Madu × 2 = 64.000) 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-03 billing banyak qty: 2 Ayam Bakar Madu + 3 Air Mineral = 90.850 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-04 [batas] pajak 0% dan service 0% → total sama dengan subtotal 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-05 [batas] keranjang kosong → semua komponen 0 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-06 [batas] pembulatan rupiah: subtotal 12.345 → pajak 1.235, service 617 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing > U2-07 [batas] pajak 100% (maksimum pengaturan) menggandakan subtotal 0ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing pada server action createOrder (Prisma di-mock) > U2-08 createOrder menyimpan subtotal 37.000, pajak 3.700, service 1.850, total 42.550 6ms
+ ✓ src/__tests__/u02-billing.test.ts > U2 - Hitung billing pada server action createOrder (Prisma di-mock) > U2-09 [salah] Dine In tanpa nomor meja ditolak sebelum menyentuh database 1ms
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-01 minggu 2026-W39 = Senin 21 Sep 00:00 WIB s.d. Minggu 27 Sep 23:59:59 WIB 11ms
+   → expected '2026-09-21T00:00:00.000Z' to be '2026-09-20T17:00:00.000Z' // Object.is equality
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-02 [batas] minggu 2027-W01 dimulai Senin 4 Jan 2027 (1 Jan jatuh hari Jumat) 1ms
+   → expected '2027-01-04T00:00:00.000Z' to be '2027-01-03T17:00:00.000Z' // Object.is equality
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-03 [batas] minggu 2026-W53 melewati pergantian tahun (28 Des 2026 – 3 Jan 2027) 1ms
+   → expected '2026-12-28T00:00:00.000Z' to be '2026-12-27T17:00:00.000Z' // Object.is equality
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-04 bulan 2026-09 = 1 Sep 00:00 WIB s.d. 30 Sep 23:59:59 WIB, label September 2026 20ms
+   → expected '2026-09-01T00:00:00.000Z' to be '2026-08-31T17:00:00.000Z' // Object.is equality
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-05 [batas] Februari tahun kabisat 2028 berakhir tanggal 29 1ms
+   → expected '2028-02-29T23:59:59.999Z' to be '2028-02-29T16:59:59.999Z' // Object.is equality
+ ✓ src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-06 [salah] format periode tidak valid jatuh ke minggu ke-1 tahun berjalan 1ms
+ ✓ src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-07 penjumlahan pendapatan 3 pesanan contoh = Rp105.800, rata-rata Rp35.267 1ms
+ ✓ src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-08 [batas] periode tanpa transaksi → pendapatan 0 dan rata-rata 0 (tanpa bagi nol) 0ms
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-09 [batas] tren harian dikelompokkan per tanggal WIB (pesanan 01:00 WIB 23 Sep) 6ms
+   → expected [ { date: '2026-09-21', …(2) }, …(1) ] to deeply equal [ { date: '2026-09-21', …(2) }, …(1) ]
+ × src/__tests__/u11-laporan-periode.test.ts > U11 - getReport dari data contoh (Prisma di-mock) > U11-10 laporan minggu 2026-W39: filter status PAID dalam rentang minggu, total Rp105.800 3ms
+   → expected '2026-09-21T00:00:00.000Z' to be '2026-09-20T17:00:00.000Z' // Object.is equality
+ ✓ src/__tests__/u11-laporan-periode.test.ts > U11 - getReport dari data contoh (Prisma di-mock) > U11-11 rekap per kategori & per metode pembayaran dari data contoh 1ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-01 ADMIN boleh membuka /produk, /laporan, /pengaturan 2ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-02 [salah] KASIR membuka halaman khusus ADMIN diarahkan ke /403 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-03 [batas] sub-route admin (/laporan/mingguan) juga terlindungi 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-04 KASIR boleh membuka /kasir, /pembayaran, /pesanan/baru 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-05 [salah] ADMIN membuka halaman operasional kasir diarahkan ke /403 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-06 halaman bersama (/dashboard, /pesanan, /stok) boleh untuk kedua role 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-07 [batas] route berawalan mirip (/produktif, /pesanan/baruan) tidak ikut terkunci 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-08 [salah] belum login diarahkan ke /login dengan callbackUrl 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-09 sudah login membuka /login atau / diarahkan ke /dashboard 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-10 [salah] sesi tanpa role tidak bisa membuka halaman ADMIN maupun KASIR 0ms
+ ✓ src/__tests__/u10-hak-akses.test.ts > U10 - Hak akses role > U10-11 menu sidebar sesuai aturan akses tiap role 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/u06-update-stok.test.ts > U6 - Update / penyesuaian stok > U6-08 [salah] stok baru kosong (tidak diisi) ditolak
+AssertionError: expected null not to be null
+ ❯ src/__tests__/u06-update-stok.test.ts:70:69
+     68|
+     69|   it("U6-08 [salah] stok baru kosong (tidak diisi) ditolak", () => {
+     70|     expect(adjustError({ newStock: "", note: "Stock opname" })).not.to…
+       |                                                                     ^
+     71|   });
+     72|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-06 [batas] pesanan 00:30 WIB 25 Sep memakai tanggal 20260925 (bukan tanggal UTC 24 Sep)
+AssertionError: expected '#TRX-20260924-0001' to be '#TRX-20260925-0001' // Object.is equality
+
+Expected: "#TRX-20260925-0001"
+Received: "#TRX-20260924-0001"
+
+ ❯ src/__tests__/u08-nomor-transaksi.test.ts:29:72
+     27|
+     28|   it("U8-06 [batas] pesanan 00:30 WIB 25 Sep memakai tanggal 20260925 …
+     29|     expect(formatOrderNumber(new Date("2026-09-24T17:30:00.000Z"), 0))…
+       |                                                                        ^
+     30|   });
+     31|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-08 rentang hitung urutan harian = 00:00–23:59:59.999 WIB
+AssertionError: expected '2026-09-25T00:00:00.000Z' to be '2026-09-24T17:00:00.000Z' // Object.is equality
+
+Expected: "2026-09-24T17:00:00.000Z"
+Received: "2026-09-25T00:00:00.000Z"
+
+ ❯ src/__tests__/u08-nomor-transaksi.test.ts:38:33
+     36|   it("U8-08 rentang hitung urutan harian = 00:00–23:59:59.999 WIB", ()…
+     37|     const { start, end } = orderDayRange(JAM_14_WIB_25_SEP);
+     38|     expect(start.toISOString()).toBe("2026-09-24T17:00:00.000Z");
+       |                                 ^
+     39|     expect(end.toISOString()).toBe("2026-09-25T16:59:59.999Z");
+     40|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  src/__tests__/u08-nomor-transaksi.test.ts > U8 - Nomor transaksi > U8-09 [batas] pesanan 00:30 WIB dihitung di hari yang sama dengan pesanan 14:00 WIB
+AssertionError: expected '2026-09-24T00:00:00.000Z' to be '2026-09-25T00:00:00.000Z' // Object.is equality
+
+Expected: "2026-09-25T00:00:00.000Z"
+Received: "2026-09-24T00:00:00.000Z"
+
+ ❯ src/__tests__/u08-nomor-transaksi.test.ts:45:38
+     43|     const dini = orderDayRange(new Date("2026-09-24T17:30:00.000Z"));
+     44|     const siang = orderDayRange(JAM_14_WIB_25_SEP);
+     45|     expect(dini.start.toISOString()).toBe(siang.start.toISOString());
+       |                                      ^
+     46|   });
+     47| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-01 minggu 2026-W39 = Senin 21 Sep 00:00 WIB s.d. Minggu 27 Sep 23:59:59 WIB
+AssertionError: expected '2026-09-21T00:00:00.000Z' to be '2026-09-20T17:00:00.000Z' // Object.is equality
+
+Expected: "2026-09-20T17:00:00.000Z"
+Received: "2026-09-21T00:00:00.000Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:16:35
+     14|   it("U11-01 minggu 2026-W39 = Senin 21 Sep 00:00 WIB s.d. Minggu 27 S…
+     15|     const r = isoWeekToRange("2026-W39");
+     16|     expect(r.start.toISOString()).toBe("2026-09-20T17:00:00.000Z");
+       |                                   ^
+     17|     expect(r.end.toISOString()).toBe("2026-09-27T16:59:59.999Z");
+     18|     expect(r.label).toBe("Minggu ke-39, 2026");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-02 [batas] minggu 2027-W01 dimulai Senin 4 Jan 2027 (1 Jan jatuh hari Jumat)
+AssertionError: expected '2027-01-04T00:00:00.000Z' to be '2027-01-03T17:00:00.000Z' // Object.is equality
+
+Expected: "2027-01-03T17:00:00.000Z"
+Received: "2027-01-04T00:00:00.000Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:22:60
+     20|
+     21|   it("U11-02 [batas] minggu 2027-W01 dimulai Senin 4 Jan 2027 (1 Jan j…
+     22|     expect(isoWeekToRange("2027-W01").start.toISOString()).toBe("2027-…
+       |                                                            ^
+     23|   });
+     24|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-03 [batas] minggu 2026-W53 melewati pergantian tahun (28 Des 2026 – 3 Jan 2027)
+AssertionError: expected '2026-12-28T00:00:00.000Z' to be '2026-12-27T17:00:00.000Z' // Object.is equality
+
+Expected: "2026-12-27T17:00:00.000Z"
+Received: "2026-12-28T00:00:00.000Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:27:35
+     25|   it("U11-03 [batas] minggu 2026-W53 melewati pergantian tahun (28 Des…
+     26|     const r = isoWeekToRange("2026-W53");
+     27|     expect(r.start.toISOString()).toBe("2026-12-27T17:00:00.000Z");
+       |                                   ^
+     28|     expect(r.end.toISOString()).toBe("2027-01-03T16:59:59.999Z");
+     29|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-04 bulan 2026-09 = 1 Sep 00:00 WIB s.d. 30 Sep 23:59:59 WIB, label September 2026
+AssertionError: expected '2026-09-01T00:00:00.000Z' to be '2026-08-31T17:00:00.000Z' // Object.is equality
+
+Expected: "2026-08-31T17:00:00.000Z"
+Received: "2026-09-01T00:00:00.000Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:33:35
+     31|   it("U11-04 bulan 2026-09 = 1 Sep 00:00 WIB s.d. 30 Sep 23:59:59 WIB,…
+     32|     const r = monthToRange("2026-09");
+     33|     expect(r.start.toISOString()).toBe("2026-08-31T17:00:00.000Z");
+       |                                   ^
+     34|     expect(r.end.toISOString()).toBe("2026-09-30T16:59:59.999Z");
+     35|     expect(r.label).toBe("September 2026");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-05 [batas] Februari tahun kabisat 2028 berakhir tanggal 29
+AssertionError: expected '2028-02-29T23:59:59.999Z' to be '2028-02-29T16:59:59.999Z' // Object.is equality
+
+Expected: "2028-02-29T16:59:59.999Z"
+Received: "2028-02-29T23:59:59.999Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:39:55
+     37|
+     38|   it("U11-05 [batas] Februari tahun kabisat 2028 berakhir tanggal 29",…
+     39|     expect(monthToRange("2028-02").end.toISOString()).toBe("2028-02-29…
+       |                                                       ^
+     40|   });
+     41|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - Laporan periode > U11-09 [batas] tren harian dikelompokkan per tanggal WIB (pesanan 01:00 WIB 23 Sep)
+AssertionError: expected [ { date: '2026-09-21', …(2) }, …(1) ] to deeply equal [ { date: '2026-09-21', …(2) }, …(1) ]
+
+- Expected
++ Received
+
+@@ -3,10 +3,10 @@
+      "date": "2026-09-21",
+      "orders": 2,
+      "sales": 88550,
+    },
+    {
+-     "date": "2026-09-23",
++     "date": "2026-09-22",
+      "orders": 1,
+      "sales": 17250,
+    },
+  ]
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:59:106
+     57|
+     58|   it("U11-09 [batas] tren harian dikelompokkan per tanggal WIB (pesana…
+     59|     expect(buildDailyTrend(PESANAN_LAPORAN).map(({ date, sales, orders…
+       |                                                                                                          ^
+     60|       { date: "2026-09-21", sales: 88550, orders: 2 },
+     61|       { date: "2026-09-23", sales: 17250, orders: 1 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
+ FAIL  src/__tests__/u11-laporan-periode.test.ts > U11 - getReport dari data contoh (Prisma di-mock) > U11-10 laporan minggu 2026-W39: filter status PAID dalam rentang minggu, total Rp105.800
+AssertionError: expected '2026-09-21T00:00:00.000Z' to be '2026-09-20T17:00:00.000Z' // Object.is equality
+
+Expected: "2026-09-20T17:00:00.000Z"
+Received: "2026-09-21T00:00:00.000Z"
+
+ ❯ src/__tests__/u11-laporan-periode.test.ts:76:47
+     74|     const where = mocks.prisma.order.findMany.mock.calls[0][0].where;
+     75|     expect(where.status).toBe("PAID");
+     76|     expect(where.createdAt.gte.toISOString()).toBe("2026-09-20T17:00:0…
+       |                                               ^
+     77|     expect(where.createdAt.lte.toISOString()).toBe("2026-09-27T16:59:5…
+     78|     expect(report.summary).toEqual({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/11]⎯
+
+
+ Test Files  3 failed | 8 passed (11)
+      Tests  11 failed | 99 passed (110)
+   Start at  08:48:03
+   Duration  1.40s (transform 56%, import 31%, tests 9%, worker 4%)
+

@@ -1,0 +1,39 @@
+
+> dapur-bu-aina@1.0.0 test:coverage
+> vitest run --coverage
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.1 C:/Users/andi/Documents/Tugas3_dapurBu_ina
+      Coverage enabled with v8
+
+
+ Test Files  11 passed (11)
+      Tests  110 passed (110)
+   Start at  08:50:38
+   Duration  598ms (transform 47%, import 30%, worker 15%, tests 9%)
+
+ % Coverage report from v8
+-----------------|---------|----------|---------|---------|-------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------|---------|----------|---------|---------|-------------------
+All files        |   98.06 |     93.7 |   95.45 |   98.58 |                   
+ access.ts       |     100 |      100 |     100 |     100 |                   
+ billing.ts      |     100 |    95.65 |     100 |     100 | 55                
+ order-number.ts |     100 |      100 |     100 |     100 |                   
+ period.ts       |     100 |     87.5 |     100 |     100 | 30-31             
+ reports.ts      |   96.66 |    83.33 |     100 |     100 | 47,69-81          
+ stock.ts        |     100 |      100 |     100 |     100 |                   
+ timezone.ts     |     100 |      100 |     100 |     100 |                   
+ utils.ts        |    90.9 |       80 |    87.5 |      90 | 5                 
+ validations.ts  |    92.3 |      100 |      80 |    92.3 | 100               
+-----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 98.06% ( 152/155 )
+Branches     : 93.7% ( 119/127 )
+Functions    : 95.45% ( 42/44 )
+Lines        : 98.58% ( 139/141 )
+================================================================================

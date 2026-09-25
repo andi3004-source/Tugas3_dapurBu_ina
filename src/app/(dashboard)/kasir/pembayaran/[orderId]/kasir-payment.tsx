@@ -14,6 +14,7 @@ import {
 import type { PaymentMethod } from "@prisma/client";
 import { confirmPayment } from "@/actions/payments";
 import { cancelOrder } from "@/actions/orders";
+import { calculateCashPayment, validatePaymentInput } from "@/lib/billing";
 import { formatRupiah, formatWaktu, cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,8 +72,7 @@ export function KasirPayment({
 
   const total = order.total;
   const cashNum = Number(cash) || 0;
-  const change = cashNum - total;
-  const cashEnough = cashNum >= total;
+  const { change, enough: cashEnough } = calculateCashPayment(total, cashNum);
 
   const method: PaymentMethod = choice === "CASH" ? "CASH" : choice === "QRIS" ? "QRIS" : cardType;
   const methodLabel =
@@ -81,9 +81,10 @@ export function KasirPayment({
   const isDineIn = order.orderType === "DINE_IN";
 
   function validate(): string | null {
-    if (choice === "CASH" && !cashEnough) return "Nominal tunai kurang dari total.";
-    if (choice === "CARD" && !/^\d{4}$/.test(cardLast4)) return "Masukkan 4 digit terakhir kartu.";
-    if (choice === "QRIS" && !referenceNo.trim()) return "Masukkan nomor referensi QRIS.";
+    const issue = validatePaymentInput(method, { total, cash: cashNum, cardLast4, referenceNo });
+    if (issue === "CASH_SHORT") return "Nominal tunai kurang dari total.";
+    if (issue === "CARD_LAST4_INVALID") return "Masukkan 4 digit terakhir kartu.";
+    if (issue === "QRIS_REF_REQUIRED") return "Masukkan nomor referensi QRIS.";
     return null;
   }
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Banknote, CreditCard, QrCode, Wallet, CheckCircle2 } from "lucide-react";
 import type { PaymentMethod } from "@prisma/client";
 import { confirmPayment } from "@/actions/payments";
+import { calculateCashPayment, validatePaymentInput } from "@/lib/billing";
 import { formatRupiah, cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,16 +40,15 @@ export function PaymentPanel({ orderId, total }: { orderId: string; total: numbe
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const cashNum = Number(cash) || 0;
-  const change = cashNum - total;
-  const cashEnough = cashNum >= total;
+  const { change, enough: cashEnough } = calculateCashPayment(total, cashNum);
 
   const quickAmounts = [total, 50000, 100000, 150000].filter((v, i, a) => a.indexOf(v) === i);
 
   function validate(): string | null {
-    if (method === "CASH" && !cashEnough) return "Uang tunai kurang dari total.";
-    if ((method === "DEBIT" || method === "CREDIT_CARD") && !/^\d{4}$/.test(cardLast4))
-      return "Masukkan 4 digit terakhir kartu.";
-    if (method === "QRIS" && !referenceNo.trim()) return "Masukkan nomor referensi QRIS.";
+    const issue = validatePaymentInput(method, { total, cash: cashNum, cardLast4, referenceNo });
+    if (issue === "CASH_SHORT") return "Uang tunai kurang dari total.";
+    if (issue === "CARD_LAST4_INVALID") return "Masukkan 4 digit terakhir kartu.";
+    if (issue === "QRIS_REF_REQUIRED") return "Masukkan nomor referensi QRIS.";
     return null;
   }
 

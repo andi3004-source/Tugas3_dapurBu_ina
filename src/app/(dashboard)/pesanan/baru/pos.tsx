@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Minus, Plus, Trash2, ShoppingCart, Utensils, ShoppingBag } from "lucide-react";
 import { createOrder } from "@/actions/orders";
+import { calculateBilling } from "@/lib/billing";
 import { formatRupiah, cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -76,10 +77,16 @@ export function Pos({
     product: productMap.get(id)!,
     qty,
   }));
-  const subtotal = cartItems.reduce((s, it) => s + it.product.price * it.qty, 0);
-  const tax = Math.round((subtotal * taxPercent) / 100);
-  const service = Math.round((subtotal * servicePercent) / 100);
-  const total = subtotal + tax + service;
+  const {
+    subtotal,
+    tax,
+    serviceCharge: service,
+    total,
+  } = calculateBilling(
+    cartItems.map((it) => ({ price: it.product.price, quantity: it.qty })),
+    taxPercent,
+    servicePercent,
+  );
 
   function submit() {
     if (cartItems.length === 0) {

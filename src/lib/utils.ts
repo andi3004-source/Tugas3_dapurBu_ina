@@ -62,19 +62,7 @@ export function formatWaktu(date: Date): string {
   }).format(date);
 }
 
-export type StockStatus = "AMAN" | "HAMPIR_HABIS" | "HABIS";
-
-export function getStockStatus(stock: number, minStock: number): StockStatus {
-  if (stock <= 0) return "HABIS";
-  if (stock <= minStock) return "HAMPIR_HABIS";
-  return "AMAN";
-}
-
-export const stockStatusLabel: Record<StockStatus, string> = {
-  AMAN: "Aman",
-  HAMPIR_HABIS: "Hampir Habis",
-  HABIS: "Habis",
-};
+export { getStockStatus, stockStatusLabel, type StockStatus } from "@/lib/stock";
 
 export function persen(current: number, previous: number): number {
   if (previous === 0) return current > 0 ? 100 : 0;

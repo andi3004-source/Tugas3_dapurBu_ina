@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/guards";
 import { stockInSchema, stockAdjustSchema } from "@/lib/validations";
 import type { ActionResult } from "@/actions/products";
+import { calculateStockAdjustment, calculateStockIn } from "@/lib/stock";
 
 /** Stok Masuk (IN) — menambah stok produk. */
 export async function stockIn(raw: unknown): Promise<ActionResult> {
@@ -18,8 +19,9 @@ export async function stockIn(raw: unknown): Promise<ActionResult> {
   try {
     await prisma.$transaction(async (tx) => {
       const product = await tx.product.findUniqueOrThrow({ where: { id: productId } });
-      const stockBefore = product.stock;
-      const stockAfter = stockBefore + quantity;
+      const change = calculateStockIn(product.stock, quantity);
+      if (!change.ok) throw new Error(change.message);
+      const { stockBefore, stockAfter } = change;
 
       await tx.product.update({ where: { id: productId }, data: { stock: stockAfter } });
       await tx.stockMovement.create({
@@ -56,8 +58,9 @@ export async function stockAdjust(raw: unknown): Promise<ActionResult> {
   try {
     await prisma.$transaction(async (tx) => {
       const product = await tx.product.findUniqueOrThrow({ where: { id: productId } });
-      const stockBefore = product.stock;
-      const diff = newStock - stockBefore;
+      const change = calculateStockAdjustment(product.stock, newStock);
+      if (!change.ok) throw new Error(change.message);
+      const { stockBefore, quantity: diff } = change;
 
       await tx.product.update({ where: { id: productId }, data: { stock: newStock } });
       await tx.stockMovement.create({
